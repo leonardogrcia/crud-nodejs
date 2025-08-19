@@ -1,12 +1,25 @@
+require("dotenv").config();
 const express = require("express");
-const server = express();
-server.use(express.json());
-const cursos = [
-  "Sistemas para Internet",
-  "Engenharia da Computação",
-  "Análise e Desenvolvimento de Sistemas",
-];
-server.get("/cursos", (req, res) => {
-  return res.json(cursos);
+
+const app = express();
+
+const db = require("./db");
+
+app.get("/clientes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  res.json(db.selectCustomer(id));
 });
-server.listen(3010);
+
+app.get("/clientes", (req, res) => {
+  res.json(db.selectCustomers());
+});
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "Hello World",
+  });
+});
+
+app.listen(process.env.PORT, () => {
+  console.log("App is running!");
+});
